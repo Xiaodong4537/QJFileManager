@@ -13,6 +13,7 @@
 		4EEAF82A21B6A0170020367C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4EEAF82921B6A0170020367C /* Assets.xcassets */; };
 		4EEAF82D21B6A0170020367C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4EEAF82B21B6A0170020367C /* LaunchScreen.storyboard */; };
 		4EEAF83021B6A0170020367C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EEAF82F21B6A0170020367C /* main.m */; };
+		4EEAF83821B6A1C20020367C /* QJFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EEAF83721B6A1C20020367C /* QJFileManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,8 @@
 		4EEAF82C21B6A0170020367C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4EEAF82E21B6A0170020367C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4EEAF82F21B6A0170020367C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		4EEAF83621B6A1C20020367C /* QJFileManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QJFileManager.h; sourceTree = "<group>"; };
+		4EEAF83721B6A1C20020367C /* QJFileManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QJFileManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +65,8 @@
 				4EEAF82121B6A0160020367C /* AppDelegate.m */,
 				4EEAF82321B6A0160020367C /* ViewController.h */,
 				4EEAF82421B6A0160020367C /* ViewController.m */,
+				4EEAF83621B6A1C20020367C /* QJFileManager.h */,
+				4EEAF83721B6A1C20020367C /* QJFileManager.m */,
 				4EEAF82621B6A0160020367C /* Main.storyboard */,
 				4EEAF82921B6A0170020367C /* Assets.xcassets */,
 				4EEAF82B21B6A0170020367C /* LaunchScreen.storyboard */,
@@ -141,6 +146,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4EEAF83821B6A1C20020367C /* QJFileManager.m in Sources */,
 				4EEAF82521B6A0160020367C /* ViewController.m in Sources */,
 				4EEAF83021B6A0170020367C /* main.m in Sources */,
 				4EEAF82221B6A0160020367C /* AppDelegate.m in Sources */,

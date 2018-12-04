@@ -7,6 +7,8 @@
 //
 
 #import "ViewController.h"
+#import "QJFileManager.h"
+
 
 @interface ViewController ()
 
@@ -17,6 +19,18 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    NSLog(@"root=%@",NSHomeDirectory());
+    NSLog(@"documents=%@",QJFileManager.pathOfDocuments);
+    NSLog(@"library=%@",QJFileManager.pathOfLibrary);
+    NSLog(@"cache=%@",QJFileManager.pathOfCache);
+    NSLog(@"cookies=%@",QJFileManager.pathOfCookies);
+    NSLog(@"preferences=%@",QJFileManager.pathOfPreferences);
+    NSLog(@"tmp=%@",QJFileManager.pathOfTmp);
+    
+    NSString *namePath = [NSString stringWithFormat:@"%@/name",QJFileManager.pathOfDocuments];
+    [QJFileManager createDirectory:namePath];
+    
+    
 }
 
 
