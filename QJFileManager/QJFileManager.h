@@ -25,27 +25,34 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSString *)pathOfTmp;
 
 /*
- * 文件夹操作
+ * 文件(夹)操作
  */
-+ (BOOL)createDirectory:(NSString *)directoryPath;
-+ (BOOL)deleteDirectory:(NSString *)directoryPath;
++ (BOOL)createDirectory:(NSString *)directoryPath; //创建文件夹
++ (BOOL)createFileWithPath:(NSString *)filePath;//创建文件
++ (BOOL)deleteDirectoryOrFile:(NSString *)path; //删除文件夹
++ (BOOL)directoryOrFileIsExists:(NSString *)path; //文件(夹)是否存在
 
 /*
- * 复制文件夹
+ * 保存文件
  */
-
-
++ (BOOL)saveString:(NSString *)fileContent filePath:(NSString *)filePath;
++ (BOOL)saveArray:(NSArray *)fileContent filePath:(NSString *)filePath;
++ (BOOL)saveDictionary:(NSDictionary *)fileContent filePath:(NSString *)filePath;
++ (BOOL)saveData:(NSData *)fileContent filePath:(NSString *)filePath;
 
 /*
- * 剪切文件夹
+ * 读取文件
  */
-
-
++ (NSString *)readString:(NSString *)filePath;
++ (NSArray *)readArray:(NSString *)filePath;
++ (NSDictionary *)readDictionary:(NSString *)filePath;
++ (NSData *)readData:(NSString *)filePath;
 
 /*
- * 重命名文件夹
+ * 归档解档
  */
-
++ (NSData *)archiveRootObject:(NSObject *)object filePath:(NSString *)filePath;
++ (NSObject *)unArchiveRootObject:(NSData *)data class:(Class)class;
 
 
 

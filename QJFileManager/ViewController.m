@@ -27,9 +27,63 @@
     NSLog(@"preferences=%@",QJFileManager.pathOfPreferences);
     NSLog(@"tmp=%@",QJFileManager.pathOfTmp);
     
+    //文件(夹)操作
     NSString *namePath = [NSString stringWithFormat:@"%@/name",QJFileManager.pathOfDocuments];
+    NSString *path = [QJFileManager.pathOfTmp stringByAppendingPathComponent:@"Test/test"];
     [QJFileManager createDirectory:namePath];
+    [QJFileManager createDirectory:path];
     
+    BOOL flag = [QJFileManager directoryOrFileIsExists:path];
+    if (flag) {
+        NSLog(@"directory is exists.");
+    }else{
+        NSLog(@"directory isn't exists.");
+    }
+    
+    NSString *filePath = [path stringByAppendingPathComponent:@"test.text"];
+    flag = [QJFileManager createFileWithPath:filePath];
+    if (flag) {
+        NSLog(@"file is create.");
+    }else{
+        NSLog(@"file isn't create.");
+    }
+    
+    flag = [QJFileManager directoryOrFileIsExists:filePath];
+    if (flag) {
+        NSLog(@"file is exists.");
+    }else{
+        NSLog(@"file isn't exists.");
+    }
+    
+    flag = [QJFileManager deleteDirectoryOrFile:namePath];
+    if (flag) {
+        NSLog(@"directory is delete.");
+    }else{
+        NSLog(@"directory isn't delete");
+    }
+    
+    flag = [QJFileManager deleteDirectoryOrFile:filePath];
+    if (flag) {
+        NSLog(@"flag is delete");
+    } else {
+        NSLog(@"flag isn't delete");
+    }
+    
+    flag = [QJFileManager deleteDirectoryOrFile:path];
+    if (flag) {
+        NSLog(@"YES");
+    } else {
+        NSLog(@"NO");
+    }
+    
+    NSString *text = @"我们都是中国人！";
+    NSString *textPath = [QJFileManager.pathOfTmp stringByAppendingPathComponent:@"/aa/test.text"];
+    flag = [QJFileManager saveString:text filePath:textPath];
+    if (flag) {
+        NSLog(@"text save sucess.");
+    } else {
+        NSLog(@"text svae failure");
+    }
     
 }
 
