@@ -8,7 +8,7 @@
 
 #import "ViewController.h"
 #import "QJFileManager.h"
-
+#import "Student.h"
 
 @interface ViewController ()
 
@@ -84,6 +84,70 @@
     } else {
         NSLog(@"text svae failure");
     }
+    
+    Student *ming = [[Student alloc] init];
+    ming.s_id = 1;
+    ming.name = @"小明";
+    ming.age =  19;
+    ming.grade = 99;
+    
+    Student *hong = [[Student alloc] init];
+    hong.s_id = 2;
+    hong.name = @"小红";
+    hong.age = 20;
+    hong.grade = 80;
+    
+    NSArray *arrayS = [NSArray arrayWithObjects:ming, @"345", nil];
+    
+    NSString *mingPath = [[QJFileManager pathOfDocuments] stringByAppendingPathComponent:@"ming.plist"];
+    NSData *data = [QJFileManager archiveRootObject:ming];
+    flag = [QJFileManager saveData:data filePath:mingPath];
+    if (flag) {
+        NSLog(@"the data saved sucess.");
+    }else{
+        NSLog(@"the operation is failure.");
+    }
+    
+    NSData *readData = [QJFileManager readData:mingPath];
+    
+    Student *s = (Student*)[QJFileManager unArchiveRootObject:readData class:Student.self];
+    NSLog(@"the student name is:%@.",s.name);
+    
+    NSString *sPath = [[QJFileManager pathOfTmp] stringByAppendingPathComponent:@"test.plist"];
+    NSData *datas = [QJFileManager archiveRootObject:arrayS];
+    flag = [QJFileManager saveData:datas filePath:sPath];
+    if (flag) {
+        NSLog(@"archive is sucess.");
+    }else{
+        NSLog(@"archive is failed");
+    }
+    
+    NSData *datasr = [QJFileManager readData:sPath];
+    
+    NSSet *set = [NSSet setWithArray:@[NSArray.self, Student.self]];
+    
+    NSArray *arraySR = (NSArray *)[QJFileManager unArchiveRootObject:datasr classes:set];
+    
+    NSLog(@"nsarray is %@.",arraySR);
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
 }
 

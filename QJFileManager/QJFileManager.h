@@ -51,9 +51,9 @@ NS_ASSUME_NONNULL_BEGIN
 /*
  * 归档解档
  */
-+ (NSData *)archiveRootObject:(NSObject *)object filePath:(NSString *)filePath;
++ (NSData *)archiveRootObject:(NSObject *)object;
 + (NSObject *)unArchiveRootObject:(NSData *)data class:(Class)class;
-
++ (NSObject *)unArchiveRootObject:(NSData *)data classes:(NSSet*)classes;
 
 
 

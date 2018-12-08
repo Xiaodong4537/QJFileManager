@@ -162,7 +162,7 @@
     return result;
 }
 
-+ (NSData *)archiveRootObject:(NSObject *)object filePath:(NSString *)filePath{
++ (NSData *)archiveRootObject:(NSObject *)object{
     NSError *error;
     NSData *result = [NSKeyedArchiver archivedDataWithRootObject:object requiringSecureCoding:YES error:&error];
     if (error) {
@@ -180,6 +180,13 @@
     return result;
 }
 
-
++ (NSObject *)unArchiveRootObject:(NSData *)data classes:(NSSet*)classes{
+    NSError *error;
+    NSObject *result = [NSKeyedUnarchiver unarchivedObjectOfClasses:classes fromData:data error:nil];
+    if (error) {
+        NSLog(@"unarchiver is failed.error info:%@",error);
+    }
+    return result;
+}
 
 @end
