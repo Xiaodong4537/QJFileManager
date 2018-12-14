@@ -13,82 +13,113 @@
 + (NSString *)pathOfDocuments{
     return [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
 }
-
 + (NSString *)pathOfLibrary{
     return [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) lastObject];
 }
-
 + (NSString *)pathOfCache{
     return [NSString stringWithFormat:@"%@/Cache",[QJFileManager pathOfLibrary]];
 }
-
 + (NSString *)pathOfCookies{
     return [NSString stringWithFormat:@"%@/Cookies",[QJFileManager pathOfLibrary]];
 }
-
 + (NSString *)pathOfPreferences{
     return [NSString stringWithFormat:@"%@/Preferences",[QJFileManager pathOfLibrary]];
 }
-
 + (NSString *)pathOfSystemData{
     return @"暂时用不到";
 }
-
 + (NSString *)pathOfTmp{
     return NSTemporaryDirectory();
 }
 
 + (BOOL)createDirectory:(NSString *)directoryPath{
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    BOOL isDir;
-    if  (![fileManager fileExistsAtPath:directoryPath isDirectory:&isDir]) {//先判断目录是否存在，不存在才创建
-        BOOL res=[fileManager createDirectoryAtPath:directoryPath withIntermediateDirectories:YES attributes:nil error:nil];
-        return res;
-    } else{
-        return NO;
-    };
-    
+    BOOL isDir = NO;
+    BOOL isExists = [fileManager fileExistsAtPath:directoryPath isDirectory:&isDir];
+    if (isExists == YES && isDir == YES) {
+        NSLog(@"文件夹已存在.");
+        return YES;
+    }else{
+        NSError *error;
+        BOOL flag = [fileManager createDirectoryAtPath:directoryPath withIntermediateDirectories:YES attributes:nil error:&error];
+        if (error) {
+            NSLog(@"error info:%@",error);
+        }
+        return flag;
+    }
 }
-
-+ (BOOL)deleteDirectoryOrFile:(NSString *)path{
++ (BOOL)deleteDirectory:(NSString *)directoryPath{
     NSFileManager *fileManager = [NSFileManager defaultManager];
     BOOL isDir;
-    if  ([fileManager fileExistsAtPath:path isDirectory:&isDir]) {//先判断目录是否存在，存在才删除
-        BOOL res=[fileManager removeItemAtPath:path error:nil];
+    if  ([fileManager fileExistsAtPath:directoryPath isDirectory:&isDir]) {//先判断目录是否存在，存在才删除
+        BOOL res=[fileManager removeItemAtPath:directoryPath error:nil];
         return res;
     } else{
         return YES;
     };
 }
-
-//判断文件是否存在于路径中
-+ (BOOL)directoryOrFileIsExists:(NSString *)path
-{
-    BOOL flag = NO;
++ (BOOL)copyDirectory:(NSString *)sourcePath destinationPath:(NSString *)destinationPath{
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    if ([fileManager fileExistsAtPath:path]) {
-        flag = YES;
-    } else {
-        flag = NO;
+    BOOL isDir;
+    NSError *error;
+    BOOL flag = [fileManager fileExistsAtPath:sourcePath isDirectory:&isDir];
+    if (flag&isDir) {
+        BOOL res = [fileManager copyItemAtPath:sourcePath toPath:destinationPath error:&error];
+        if(error){
+            NSLog(@"error info:%@",error);
+            return NO;
+        }
+        return res;
+        
+    }else{
+        NSLog(@"路径不存在或不是文件夹");
+        return NO;
     }
-    return flag;
+}
++ (BOOL)moveDirectory:(NSString *)sourcePath destinationPath:(NSString *)destinationPath{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    BOOL isDir;
+    NSError *error;
+    BOOL flag = [fileManager fileExistsAtPath:sourcePath isDirectory:&isDir];
+    if (flag&isDir) {
+        BOOL res = [fileManager moveItemAtPath:sourcePath toPath:destinationPath error:&error];
+        if(error){
+            NSLog(@"error info:%@",error);
+            return NO;
+        }
+        return res;
+    }else{
+        NSLog(@"路径不存在或不是文件夹");
+        return NO;
+    }
+}
++ (BOOL)existsDirectory:(NSString *)directoryPath{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    BOOL isDir;
+    BOOL res = [fileManager fileExistsAtPath:directoryPath isDirectory:&isDir];
+    if (res&&isDir) {
+        return YES;
+    }else{
+        NSLog(@"路径不存在或者不是文件夹");
+        return NO;
+    }
 }
 
-+ (BOOL)createFileWithPath:(NSString *)filePath{
++ (BOOL)createFileAtPath:(NSString *)atPath{
     //1.文件管理单例
-    BOOL flag = YES;
     NSFileManager *fileManager = [NSFileManager defaultManager];
     
     //2.验证文件是否存在
-    BOOL tmp = [fileManager fileExistsAtPath:filePath];
+    BOOL tmp = [fileManager fileExistsAtPath:atPath];
     if (tmp) {
         return YES;
     }
     
     //3.创建文件的路径，即文件夹
+    BOOL flag = YES;
     NSError *error;
     //stringByDeletingLastPathComponent删除最后一个路径节点
-    NSString *dirPath = [filePath stringByDeletingLastPathComponent];
+    NSString *dirPath = [atPath stringByDeletingLastPathComponent];
     flag = [fileManager createDirectoryAtPath:dirPath withIntermediateDirectories:YES attributes:nil error:&error];
     if (error) {
         NSLog(@"create file failed. error info: %@",error);
@@ -98,9 +129,53 @@
     }
     
     //4.万事具备，只欠东风-创建文件，前3步是准备工作
-    flag = [fileManager createFileAtPath:filePath contents:nil attributes:nil];
+    flag = [fileManager createFileAtPath:atPath contents:nil attributes:nil];
     return flag;
     
+}
++ (BOOL)deleteFileAtPath:(NSString *)atPath{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    
+    //验证文件是否存在
+    BOOL tmp = [fileManager fileExistsAtPath:atPath];
+    if (!tmp) {
+        return YES;
+    }
+    
+    NSError *error;
+    BOOL flag = [fileManager removeItemAtPath:atPath error:&error];
+    if (error) {
+        NSLog(@"error info:%@",error);
+    }
+    return flag;
+}
++ (BOOL)copyFileAtPath:(NSString *)atPath toPath:(NSString *)toPath{
+    NSError *error;
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    BOOL flag = [fileManager copyItemAtPath:atPath toPath:toPath error:&error];
+    if (error) {
+        NSLog(@"error info:%@",error);
+    }
+    return flag;
+}
++ (BOOL)moveFileAtPath:(NSString *)atPath toPath:(NSString *)toPath{
+    NSError *error;
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    BOOL flag = [fileManager moveItemAtPath:atPath toPath:toPath error:&error];
+    if (error) {
+        NSLog(@"error info:%@",error);
+    }
+    return flag;
+}
++ (BOOL)existsFileAtPath:(NSString *)atPath{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    BOOL isDir;
+    BOOL flag = [fileManager fileExistsAtPath:atPath isDirectory:&isDir];
+    if (flag&!isDir) {
+        return YES;
+    }else{
+        return NO;
+    }
 }
 
 + (BOOL)saveString:(NSString *)fileContent filePath:(NSString *)filePath{
@@ -121,22 +196,18 @@
     }
     return flag;
 }
-
 + (BOOL)saveArray:(NSArray *)fileContent filePath:(NSString *)filePath{
     BOOL flag = [fileContent writeToFile:filePath atomically:YES];
     return flag;
 }
-
 + (BOOL)saveDictionary:(NSDictionary *)fileContent filePath:(NSString *)filePath{
     BOOL flag = [fileContent writeToFile:filePath atomically:YES];
     return flag;
 }
-
 + (BOOL)saveData:(NSData *)fileContent filePath:(NSString *)filePath{
     BOOL flag = [fileContent writeToFile:filePath atomically:YES];
     return flag;
 }
-
 
 + (NSString *)readString:(NSString *)filePath{
     NSError *error;
@@ -146,22 +217,18 @@
     }
     return file;
 }
-
 + (NSArray *)readArray:(NSString *)filePath{
     NSArray *result = [NSArray arrayWithContentsOfFile:filePath];
     return result;
 }
-
 + (NSDictionary *)readDictionary:(NSString *)filePath{
     NSDictionary *result = [NSDictionary dictionaryWithContentsOfFile:filePath];
     return result;
 }
-
 + (NSData *)readData:(NSString *)filePath{
     NSData *result = [NSData dataWithContentsOfFile:filePath];
     return result;
 }
-
 + (NSData *)archiveRootObject:(NSObject *)object{
     NSError *error;
     NSData *result = [NSKeyedArchiver archivedDataWithRootObject:object requiringSecureCoding:YES error:&error];
@@ -179,7 +246,6 @@
     }
     return result;
 }
-
 + (NSObject *)unArchiveRootObject:(NSData *)data classes:(NSSet*)classes{
     NSError *error;
     NSObject *result = [NSKeyedUnarchiver unarchivedObjectOfClasses:classes fromData:data error:nil];
