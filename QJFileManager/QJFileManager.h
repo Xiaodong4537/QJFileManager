@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 /*
  * 应用初始化生成的目录的路径
  */
++ (NSString *)pathOfHome;
 + (NSString *)pathOfDocuments;
 + (NSString *)pathOfLibrary;
 + (NSString *)pathOfCache;
@@ -30,10 +31,19 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (BOOL)createDirectory:(NSString *)directoryPath; //创建文件夹
 + (BOOL)deleteDirectory:(NSString *)directoryPath; //删除文件夹
-+ (BOOL)copyDirectory:(NSString *)sourcePath destinationPath:(NSString *)destinationPath; //复制文件夹
-+ (BOOL)moveDirectory:(NSString *)sourcePath destinationPath:(NSString *)destinationPath; //移动文件夹
-+ (BOOL)existsDirectory:(NSString *)directoryPath; //存在文件夹
++ (BOOL)copySourceDirectory:(NSString *)sourcePath destinationPath:(NSString *)destinationPath; //复制文件夹
++ (BOOL)moveSourceDirectory:(NSString *)sourcePath destinationPath:(NSString *)destinationPath; //移动文件夹
 //缺少遍历文件方法
++ (BOOL)existsDirectory:(NSString *)directoryPath; //存在文件夹
+
+//遍历文件夹中某种类型的文件 type->@"plist" 检查最上层文件夹
++ (NSArray *)getFileNameListAtPath:(NSString *)path
+                          fileType:(NSString *)filetype;
+//递归遍历文件夹某种类型的文件 type->@".plist"
++ (void)getFileNameListAtPath:(NSString *)path fileType:(NSString *)type fileListArray:(NSMutableArray **)array;
+
+//遍历文件夹中的文件和文件夹 文件和目录分别在数组中
++ (void)getAllFileAndDirectoryAtPath:(NSString *)path fileListArray:(NSMutableArray **)fileArray directoryListArray:(NSMutableArray **)directoryArray isAllDirectories:(BOOL)isAllDirectories;
 
 /*
  * 文件夹操作
